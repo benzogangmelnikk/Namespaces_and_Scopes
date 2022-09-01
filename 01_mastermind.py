@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from termcolor import cprint, colored
+
+from mastermind_engine import riddle_number, check_number
 
 # Игра «Быки и коровы»
 # https://goo.gl/Go2mb9
@@ -43,4 +46,33 @@
 # Это пример применения SOLID принципа (см https://goo.gl/GFMoaI) в архитектуре программ.
 # Точнее, в этом случае важен принцип единственной ответственности - https://goo.gl/rYb3hT
 
-# TODO здесь ваш код...
+while True:
+	moves = 0
+
+	cprint('Компьютер загадывает число...', color="blue")
+	riddle_number()
+	cprint('Число загадано!', color="green")
+
+	while True:
+		while True:
+			user_number = input(colored("Попробуй отгадать число: ", color="blue"))
+			if user_number.isnumeric() and len(user_number) == 4:
+				break
+			else:
+				cprint("Введите четырехзначное число!", color="red")
+		user_results = check_number(user_number)
+		moves += 1
+		cprint("быки - " + str(user_results["bulls"]) + ", коровы - " + str(user_results["cows"]), color="cyan")
+		if user_results["bulls"] == 4:
+			cprint("Вы выиграли! Количество ходов: " + str(moves), 'red', 'on_green', ['underline'])
+			break
+
+	while True:
+		another_round = input(colored("Хотите еще партию? (y/n): ", on_color="on_magenta"))
+		if another_round == "y" or another_round == "n":
+			break
+		else:
+			cprint("Некорректное значение!", color="red")
+
+	if another_round == "n":
+		break
